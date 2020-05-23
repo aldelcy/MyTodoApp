@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>{{ data.todo.title }} List:</h2>
+
+    <hr>
+
+    <a class="uk-button uk-button-default" href="#todoForm" uk-toggle>Add a Todo Item</a>
+
+    <div id="todoForm" uk-modal>
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Add a ToDo Item</h2>
+            </div>
+            <div class="uk-modal-body">
+
+
+                <form action="/todo_item/add/{{ data.todo.id }}" method="POST" class="uk-form-stacked" style="max-width: 400px;">
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-stacked-text">Title</label>
+                        <div class="uk-form-controls">
+                            <input type="text" class="uk-input" name="title" placeholder="List Name"><br>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <textarea class="uk-textarea" cols="30" rows="3" name="desc" placeholder="Describe your list" ></textarea><br>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-stacked-text">Color</label>
+                        <div class="uk-form-controls">
+                            <input type="color" class="uk-input" name="color"> <br>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-stacked-text">Priority</label>
+                        <div class="uk-form-controls">
+                            <input type="number" class="uk-input" name="priority" placeholder="Priority"><br>
+                        </div>
+                    </div>
+
+                    <input type="submit" class="uk-button uk-button-primary" value="Add Todo Item">
+                </form>
+
+
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <ol>
+        {% for todo_item in data.todo.todoitems %}
+            <li>
+                {% if todo_item.done == 0 %}
+                    <a href="/todo_item/{{ todo_item.id }}">{{ todo_item.title }}</a> |
+                    <a href="/todo_item/edit/{{ todo_item.id }}?done=1">done</a>
+                {% else %}
+                    <strike>{{ todo_item.title }}</strike> |
+                    <a href="/todo_item/edit/{{ todo_item.id }}?done=0">Undo</a>
+                {% endif %}
+                |
+                <a href="/todo_item/delete/{{todo_item.id}}" >delete</a>
+            </li>
+        {% endfor %}
+    </ol>
+
+
+{% endblock %}
